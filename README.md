@@ -1,14 +1,12 @@
-# Blender ArmorPaint Livelink
+# Blender 4x ArmorPaint Livelink
 
-*The project is not under active development, fix updates are made as soon as possible (please consider [donating](https://github.com/PiloeGAO/Blender-ArmorPaintLiveLink#Donation) for faster updates)*
-
-This addon is the current implementation of live link for [ArmorPaint](http://www.armorpaint.org) inside of Blender 2.8+
+This addon is the current implementation of live link for [ArmorPaint](http://www.armorpaint.org) inside of Blender 4.x
 
 ## Getting Started
 
 ### Prerequisites
 
-Download latest version of Blender (v. 2.80 minimum) and ArmorPaint V0.8.
+Download latest version of Blender (v. 4.0 minimum) and ArmorPaint V0.8.
 
 ### Installing
 
@@ -20,29 +18,12 @@ Download latest version of Blender (v. 2.80 minimum) and ArmorPaint V0.8.
 6. Select your object  (he needs to be unwrapped) and click on the "Open in ArmorPaint" to edit it inside of ArmorPaint  (* Optionnal:You can use a custom arm name instead of the object name - example: Use "MyBeautifullCube.arm" for the "Cube" object instead of "Cube.arm"*)  
 7. When the texturing process is done, export your textures to a subdirectory called "exports" (* Optionnal: You can also use a custom directory for your textures - example: "/highdefTextures/"*)
 
-## Feature Request
-
-Your project as a special needed?
-
-Please add your request in "Issues", we will looking for it as fast as possible!
-
-## Contributing
-
-Contributions are encouraged, but the code need to stay clear and organized.
-Also, fixes for self-compiled versions are not allowed, we only target ArmorPaint official builds for now.
-
 ## Authors
 
 * **[PiloeGAO](https://github.com/PiloeGAO)** - *Initial work*
 * **[Spirou4D](https://github.com/Spirou4D)** - *Code fix*
 * **[tobiasBora](https://github.com/tobiasBora)** - *Temporary directory fix*
-
+* **[kcalvinroy](https://github.com/kcalvinroy)** - *Switch fix from previous Blender Obj export to new Blender 4.x export*
 ## License
 
 This project is licensed under the GNU GPLv3 License - see the [LICENSE.md](LICENSE) file for details.
-
-## Donation
-
-You can support this project by making a donation.
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VXD77HL4GZNP6)
