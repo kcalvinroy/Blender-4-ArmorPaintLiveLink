@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-# python
 # ##### BEGIN GPL LICENSE BLOCK #####
 #
 #  This program is free software; you can redistribute it and/or
@@ -21,14 +19,14 @@
 
 bl_info = {
     "name": "ArmorPaint Live-Link",
-    "author": "PiloeGAO (Leo DEPOIX), Spirou4D",
-    "version": (1, 1, 0),
-    "blender": (2, 83, 0),
+    "author": "PiloeGAO (Leo DEPOIX), Spirou4D, luboslenco, Kitara Calvin Roy",
+    "version": (0, 9, 0),
+    "blender": (4, 0, 0),
     "location": "3D View > Side Bar",
-    "description": "Integration of ArmorPaint into Blender Workflow",
+    "description": "Integration of ArmorPaint into Blender",
     "warning": "Development",
-    "wiki_url": "https://github.com/PiloeGAO/Blender-ArmorPaintLiveLink",
-    "tracker_url": "https://github.com/PiloeGAO/Blender-ArmorPaintLiveLink/issues",
+    "wiki_url": "https://github.com/armory3d/armorpaint_blender",
+    "tracker_url": "https://github.com/armory3d/armorpaint_blender/issues",
     "category": "Paint"}
 
 import bpy, os, subprocess, platform, tempfile
@@ -251,15 +249,12 @@ class ArmorPaintLiveLinkAddonPreferences(AddonPreferences):
         layout = self.layout
 
         if SYSTEM == "Windows":
-            layout.label(text="Current OS: Windows")
             layout.label(text="Please select the location of " +
                                 "the ArmorPaint.exe")
         elif SYSTEM == "Linux":
-            layout.label(text="Current OS: Linux")
             layout.label(text="Please select this path: " +
             "\"ArmorPaint-Installation-Path/ArmorPaint\"")
         elif SYSTEM == "Darwin":
-            layout.label(text="Current OS: MacOS")
             layout.label(text="Please select this path: " +
             "\"ArmorPaint-Installation-Path/ArmorPaint.app/Contents/MacOS/\"")
         layout.prop(self, "path_exe")
@@ -293,13 +288,16 @@ class ArmorPaintLivelinkOperator(Operator):
 
         #ERRORS
         if typM != 'MESH':
-            self.report({'ERROR'}, "ArmorPaint only works with Meshes!")
+            self.report({'ERROR'}, "ArmorPaint only works with meshes")
             return {'CANCELLED'}
         if path_exe == "":
             self.report({'ERROR'}, "No ArmorPaint executable path in settings")
             return {'CANCELLED'}
         if scn.armorpaint_properties == "":
-            self.report({'ERROR'}, "Set an ArmorPaint Project directory please")
+            self.report({'ERROR'}, "Set an ArmorPaint project directory first")
+            return {'CANCELLED'}
+        if bpy.data.filepath == "":
+            self.report({'ERROR'}, "Save blend file first")
             return {'CANCELLED'}
         
 
@@ -311,31 +309,28 @@ class ArmorPaintLivelinkOperator(Operator):
             subprocess.Popen([path_exe,armFilepath])
         else:
             # Create a temporary file to store the .obj
-            path_tmp = tempfile.mkstemp(suffix=".obj")[1]
+            path_tmp = bpy.path.abspath(projP) + SEP + "tmp.obj"
         
             # Export current object as obj and open it in armorpaint
             # Export the object as Obj and save it in the correct directory
-            bpy.ops.export_scene.obj(filepath=path_tmp,
+            bpy.ops.wm.obj_export(filepath=path_tmp,
                                     check_existing=True,
-                                    axis_forward='-Z',
-                                    axis_up='Y',
+                                    forward_axis='NEGATIVE_Z',
+                                    up_axis='Y',
                                     filter_glob="*.obj;*.mtl",
-                                    use_selection=True,
-                                    use_animation=False,
-                                    use_mesh_modifiers=True,
-                                    use_edges=True,
-                                    use_smooth_groups=True,
-                                    use_smooth_groups_bitflags=False,
-                                    use_normals=True,
-                                    use_uvs=True,
-                                    use_materials=True,
-                                    use_triangles=False,
-                                    use_nurbs=False,
-                                    use_vertex_groups=False,
-                                    use_blen_objects=True,
-                                    group_by_object=False,
-                                    group_by_material=False,
-                                    keep_vertex_order=False,
+                                    export_selected_objects=True,
+                                    apply_modifiers=True,
+                                    export_animation=False,
+                                    export_smooth_groups=True,
+                                    smooth_group_bitflags=False,
+                                    export_normals=True,
+                                    export_uv=True,
+                                    export_materials=True,
+                                    export_triangulated_mesh=False,
+                                    export_curves_as_nurbs=False,
+                                    export_vertex_groups=False,
+                                    export_object_groups=False,
+                                    export_material_groups =False,
                                     global_scale=1,
                                     path_mode='AUTO')
 
@@ -419,7 +414,7 @@ class ArmorPaintOpenPanel(View3DPanel, Panel):
                         "filename", 
                         text="")
             col.operator("object.armorpaint_livelink",
-                        text="Open into ArmorPaint",
+                        text="Open in ArmorPaint",
                         icon='TPAINT_HLT')
         else:
             col.label(icon='CANCEL',
